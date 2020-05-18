@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #app {
+            width: 506px;
+            height: 900px;
+            background: #000;
+            position: relative;
+        }
+
+        #back {
+            width: 506px;
+            height: 900px;
+            background: url('./images/back.png');
+            position: absolute;
+        }
+
+        #front {
+            width: 506px;
+            height: 497px;
+            background: url('./images/front.png');
+            position: absolute;
+        }
+
+        #scroll-card {
+            width: 283px;
+            height: 428px;
+            background: url('./images/scollcard-big.png');
+            position: absolute;
+            background-size: cover;
+            transform: translate(39.5%, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="back"></div>
+        <div id="scroll-card"></div>
+        <div id="front"></div>
+    </div>
+
+    <script src="./js/jquery-3.5.0.min.js"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>
