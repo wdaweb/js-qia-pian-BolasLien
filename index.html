@@ -45,23 +45,247 @@
         #scroll-card {
             width: 283px;
             height: 428px;
-            background: url('./images/scollcard-big.png');
             position: absolute;
             background-size: cover;
             transform: translate(39.5%, 0);
+        }
+
+        .card {
+            background: url('./images/scollcard-big.png');
+        }
+
+        .scroll {
+            animation-name: scroll;
+            animation-duration: 2s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translate(39.5%, 0);
+            }
+
+            50% {
+                transform: translate(39.5%, 100%);
+            }
+
+            70% {
+                transform: translate(39.5%, 300%);
+            }
+
+            80% {
+                transform: translate(39.5%, 300%) scale(1.2);
+            }
+
+            100% {
+                transform: translate(39.5%, 80%) scale(1.4);
+                z-index: 1;
+            }
+        }
+
+        #bg {
+            width: 506px;
+            height: 900px;
+            background-image: url('./images/bg.png');
+            position: absolute;
+        }
+
+        #black {
+            width: 506px;
+            height: 900px;
+            background-color: #000;
+            position: absolute;
+        }
+
+        #turn-card {
+            width: 40px;
+            height: 60px;
+            position: absolute;
+            background-size: cover;
+            transform-style: preserve-3d;
+            transform: translate(-50%, 0) rotateY(0deg);
+            left: 50%;
+            top: 0%;
+        }
+
+        .turn {
+            animation-name: turn;
+            animation-duration: 3s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes turn {
+            from {
+                top: 0%;
+                transform: translate(-50%, 0) rotateY(0deg);
+            }
+
+            to {
+                top: 30%;
+                transform: translate(-50%, 0) rotateY(360deg);
+            }
+        }
+
+        .zoom {
+            animation-name: zoom;
+            animation-duration: 3s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes zoom {
+            from {
+                top: 30%;
+                transform: translate(-50%, 0) rotateY(360deg);
+            }
+
+            to {
+                top: 15%;
+                transform: translate(-50%, 0) rotateY(900deg);
+                width: 488px;
+                height: 730px;
+            }
+        }
+
+        #behind {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            backface-visibility: hidden;
+            background-image: url('./images/scollcard-big.png');
+        }
+
+        #forward {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            background-image: url('./images/card.png');
+        }
+
+        .zack-img {
+            width: 80%;
+            height: 42%;
+            backface-visibility: hidden;
+            position: relative;
+            left: 10%;
+            top: 9%;
+        }
+
+        .zack-text {
+            width: 70%;
+            height: 20%;
+            position: relative;
+            left: 15%;
+            top: 20%;
+            color: #ffffff;
+        }
+
+        .zack-link {
+            display: block;
+            width: 70%;
+            height: 20%;
+            position: relative;
+            left: 15%;
+            top: 20%;
+            color: #ffffff;
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <div id="back"></div>
-        <div id="scroll-card"></div>
-        <div id="front"></div>
+        <div id="first">
+            <div id="back"></div>
+            <div id="scroll-card" class="card"></div>
+            <div id="front"></div>
+        </div>
+        <div id="second">
+            <div id="bg"></div>
+            <div id="turn-card">
+                <div id="forward">
+                    <img class="zack-img"></img>
+                    <p class="zack-text"></p>
+                    <a class="zack-link">貼文連結</a>
+                </div>
+                <div id="behind"></div>
+            </div>
+            <div id="black"></div>
+        </div>
+
     </div>
 
     <script src="./js/jquery-3.5.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script>
+        $('.zack-text').fadeTo(10, 0)
+        $('.zack-link').fadeTo(10, 0)
+        $('#black').fadeTo(10, 1)
+        $('#second').hide()
+        let click = false
+
+
+
+        $("#app").click(() => {
+            if (click) {
+                getZack()
+
+                $('#scroll-card').addClass('scroll')
+                setTimeout(() => {
+                    $('#first').hide()
+                    $('#second').show()
+                    $('#turn-card').addClass('turn')
+                    $('#black').fadeTo(1000, 0)
+
+                    setTimeout(() => {
+                        $('#turn-card').addClass('zoom')
+
+                        setTimeout(() => {
+                            $('.zack-text').fadeTo(500, 1)
+                            $('.zack-link').fadeTo(500, 1)
+
+                        }, 500)
+                    }, 3000);
+                }, 3000);
+            }
+            else {
+                $('#scroll-card').removeClass('scroll')
+                $('#first').show()
+                $('#second').hide()
+                $('#turn-card').removeClass('turn')
+                $('#turn-card').removeClass('zoom')
+                $('#black').fadeTo(10, 1)
+                $('.zack-text').fadeTo(10, 0)
+                $('.zack-link').fadeTo(10, 0)
+            }
+            click = !click
+        })
+
+        const getZack = async () => {
+            try {
+                let json = await axios.get('https://api.kento520.tw/zack/?rand')
+                let zackImg = ''
+                let zackText = ''
+                let zacklink = ''
+                zackImg = json.data.image
+                zackText = json.data.description
+                zacklink = json.data.link
+
+                $('.zack-img').attr('src', zackImg)
+                $('.zack-text').text(zackText)
+                $('.zack-link').attr('href', zacklink)
+                console.log(json.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
 
     </script>
 </body>
