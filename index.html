@@ -148,9 +148,11 @@
         #behind,
         #forward {
             -webkit-perspective: 0;
+            -webkit-transform-style: preserve-3d;
             -webkit-backface-visibility: hidden;
-            -webkit-transform: translate3d(0, 0, 0);
-            visibility: visible;
+            -moz-backface-visibility: hidden;
+            -ms-backface-visibility: hidden;
+            -o-backface-visibility: hidden;
             backface-visibility: hidden;
         }
 
